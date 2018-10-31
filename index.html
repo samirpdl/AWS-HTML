@@ -1,0 +1,67 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    
+</head>
+
+
+<body>
+
+    <div class="container">
+            Loading....
+    </div>
+</body>
+
+<script>
+    $.getJSON('http://localhost:3000/data', function (data) {
+        var htmls = "";
+        $.each(data, function (index) {
+            var html = ""
+            let projectName = data[index].project;
+            let environments = data[index].environments;
+            html += "<h1>" + projectName + "</h1>";
+            environments.forEach(function (environment) {
+                html += "<h3>" + environment.title + "</h3>";
+                html += '<table class="table table-striped">';
+                html += '<thead>';
+                html += '<tr>';
+                html += '<td>Type</td>';
+                html += '<td>IP</td>';
+                html += "<td>Domain</td>";
+                html += '<td>OS</td>';
+                html += '<td>Account</td>'
+                html += '<td>Location</td>'
+                html += "<td>Status</td>";
+                html += '</tr>';
+                html += '</thead>';
+                html += '<tbody>';
+                environment.servers.forEach(function (server) {
+                    if (server.status === "stopped"){
+                        html += '<tr class="text-danger">';
+                    }else{
+                        html += '<tr class="">';
+                    }
+                    html += "<td>" + server.type + "</td>";
+                    html += "<td>" + server.ip + "</td>";
+                    html += "<td>" + server.domain + "</td>";
+                    html += "<td>" + server.os + "</td>";
+                    html += "<td>" + server.account + "</td>";
+                    html += "<td>" + server.location + "</td>";
+                    html += "<td>" + server.status + "</td>";
+                    html += "</tr>";
+                });
+                html += "</tbody>";
+                html += "</table>";
+            });
+
+            htmls += html;
+        });
+        $(".container").html(htmls);
+    });
+</script>
+
+</html>
