@@ -5,62 +5,78 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    
+
 </head>
 
 
 <body>
 
-    <div class="container">
-            Loading....
+    <div class="container-fluid">
+        Loading....
     </div>
 </body>
 
 <script>
     $.getJSON('http://localhost:3000/data', function (data) {
         var htmls = "";
+        htmls += '<table class="table table-striped">';
         $.each(data, function (index) {
             var html = ""
             let projectName = data[index].project;
             let environments = data[index].environments;
+            html += '<thead>';
+            html += "<tr>";
+            html += "<th colspan='9'>";
             html += "<h1>" + projectName + "</h1>";
+            html += "</th>";
+            html += "</tr>";
+            html += "</thead>";
             environments.forEach(function (environment) {
+                html += '<thead>';
+                html += "<tr>";
+                html += "<th colspan='9'>";
                 html += "<h3>" + environment.title + "</h3>";
-                html += '<table class="table table-striped">';
+                html += "</th>";
+                html += "</tr>";
+                html += "</thead>";
                 html += '<thead>';
                 html += '<tr>';
+                html += "<td>Name</td>";
                 html += '<td>Type</td>';
                 html += '<td>IP</td>';
                 html += "<td>Domain</td>";
                 html += '<td>OS</td>';
                 html += '<td>Account</td>'
                 html += '<td>Location</td>'
+                html += '<td>Services</td>'
                 html += "<td>Status</td>";
                 html += '</tr>';
                 html += '</thead>';
                 html += '<tbody>';
                 environment.servers.forEach(function (server) {
-                    if (server.status === "stopped"){
+                    if (server.status === "stopped") {
                         html += '<tr class="text-danger">';
-                    }else{
+                    } else {
                         html += '<tr class="">';
                     }
+                    html += "<td>" + server.name + "</td>";
                     html += "<td>" + server.type + "</td>";
                     html += "<td>" + server.ip + "</td>";
                     html += "<td>" + server.domain + "</td>";
                     html += "<td>" + server.os + "</td>";
                     html += "<td>" + server.account + "</td>";
                     html += "<td>" + server.location + "</td>";
+                    html += "<td>" + server.services + "</td>";
                     html += "<td>" + server.status + "</td>";
                     html += "</tr>";
                 });
                 html += "</tbody>";
-                html += "</table>";
             });
-
+            
             htmls += html;
         });
-        $(".container").html(htmls);
+        htmls += "</table>";
+        $(".container-fluid").html(htmls);
     });
 </script>
 
